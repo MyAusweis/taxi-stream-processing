@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feedconsumer
+  labels:
+    app: feedconsumer
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: feedconsumer
+    tier: frontend
+  type: LoadBalancer
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: feedconsumer
+  labels:
+    app: feedconsumer
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: feedconsumer
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: feedconsumer
+        tier: frontend
+    spec:
+      containers:
+      - image: sandeepgiri9/taxicounterk8s:feedconsumer
+        name: feedconsumer
+        env:
+        - name: feedconsumer_DB_HOST
+          value: feedconsumer-mysql
+        - name: feedconsumer_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password

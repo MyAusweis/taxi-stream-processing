@@ -1,0 +1,4 @@
+django==2.2.3
+apiclient==1.0.4
+django-mysql==3.2.0
+mysqlclient

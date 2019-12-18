@@ -1,0 +1,43 @@
+version: "3"
+services:
+  taxicounterservice_migration:
+    image: sandeepgiri9/taxicounter:service
+    volumes:
+      - /var/taxicountsite/data/:/code/main/taxicountsite/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+    command: python /code/main/taxicountsite/manage.py migrate
+  taxicounterservice:
+    image: sandeepgiri9/taxicounter:service
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/taxicountsite/data/:/code/main/taxicountsite/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+    command: python /code/main/taxicountsite/manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - taxicounterservice_migration
+  feedconsumer:
+    # replace username/repo:tag with your name and image details
+    image: sandeepgiri9/taxicounter:feedconsumer
+    deploy:
+      replicas: 4
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    depends_on:
+      - taxicounterservice
+networks:
+  webnet:

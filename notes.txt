@@ -1,0 +1,11 @@
+1. Following https://cloud.google.com/pubsub/docs/reference/libraries
+
+gcloud cli gcloud alpha pubsub subscriptions create test --topic
+gcloud alpha pubsub subscriptions create test --topic projects/pubsub-public-data/topics/taxirides-realtime
+gcloud alpha pubsub subscriptions pull projects/thelab-240901/subscriptions/test
+gcloud alpha pubsub subscriptions pull test
+
+https://googleapis.github.io/google-cloud-python/latest/pubsub/index.html
+
+
+gcloud alpha pubsub subscriptions pull projects/thelab-240901/subscriptions/taxirides_test

@@ -1,0 +1,8 @@
+secretGenerator:
+- name: mysql-pass
+  literals:
+  - password=HYUJ@*!@KL
+resources:
+  - mysql-deployment.yaml
+  - taxicounter-service-deployment.yaml
+  - feedconsumer-deployment.yaml
